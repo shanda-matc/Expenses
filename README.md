@@ -1,8 +1,8 @@
 This repository will be for writers to write short stories and for readers who love to read stories.
 
 ### Problem Statement
-In today's digital world, many people love to read and write short stories.Through this website writers can easily share their stories, and readers can enjoy and talk about them. This website will be simple to use and enjoyable for everyone involved.
-ScribblesAmplifyKnack will provide a user-friendly interface for writers to create and manage their stories. Through this website, users Users should be able to easily browse and search for stories based on the categories and author names. 
+In today's digital world, many people love to read and write short stories. Through this website, writers can easily share their stories, and readers can enjoy and talk about them. This website will be simple to use and enjoyable for everyone involved.
+ScribblesAmplifyKnack will provide a user-friendly interface for writers to create and manage their stories. Through this website,Users should be able to easily browse and search for stories based on the categories and author names. 
 
 ### Project Technologies/Techniques
 * Database
@@ -27,4 +27,4 @@ ScribblesAmplifyKnack will provide a user-friendly interface for writers to crea
 
 ### Project Plan
 * [TimeLog](TimeLog.md)
-
+* [ProjectPlan.md](ProjectPlan.md)

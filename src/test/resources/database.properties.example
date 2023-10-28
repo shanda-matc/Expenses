@@ -1,0 +1,10 @@
+# database.properties.example
+
+# Database URL
+db.url=jdbc:mysql://localhost:3306/mydatabase
+
+# Database Username
+db.username=myuser
+
+# Database Password
+db.password=mypassword
