@@ -35,7 +35,7 @@ class UserDaoTest {
      */
     @Test
     void getAllUsersSuccess() {
-        int expectedSize = 3;
+        int expectedSize = 2;
         assertEquals(expectedSize, dao.getAllUsers().size());
     }
 
@@ -44,8 +44,8 @@ class UserDaoTest {
      */
     @Test
     void getByUserNameSuccess() {
-        List<User> users = dao.getByUserName("userName");
-        assertEquals(3, users.size());
+        List<User> users = dao.getByUserName("shanda");
+        assertEquals(1, users.size());
     }
 
     /**
@@ -53,7 +53,7 @@ class UserDaoTest {
      */
     @Test
     void insertSuccess() {
-        User newUser = new User("shanda@gmail.com","Secret123", "Shilpa", "shanda.jpg", "Shanda");
+        User newUser = new User("Sam", "Kunckle", "skunkle", "kunkle@gmail.com","Secret123", "SamK", "sam.jpg", "intro");
         int id = dao.insert(newUser);
         assertNotEquals(0,id);
         User retrievedUser= dao.getById(newUser.getId());
@@ -65,12 +65,12 @@ class UserDaoTest {
      */
     @Test
     void saveOrUpdateSuccess() {
-        /*String newLastName = "Davis";
-        User userToUpdate = dao.getById(3);
+        String newLastName = "Davis";
+        User userToUpdate = dao.getById(1);
         userToUpdate.setLastName(newLastName);
         dao.saveOrUpdate(userToUpdate);
-        User retrievedUser = dao.getById(3);
-        assertEquals(newLastName, retrievedUser.getLastName());*/
+        User retrievedUser = dao.getById(1);
+        assertEquals(newLastName, retrievedUser.getLastName());
     }
 
     /**

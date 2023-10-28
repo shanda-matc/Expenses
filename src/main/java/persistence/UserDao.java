@@ -46,11 +46,14 @@ public class UserDao {
      */
     public List<User> getByUserName(String userName) {
         Session session = sessionFactory.openSession();
+
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);
         Root<User> root = query.from(User.class);
-        Expression<String> propertyPath = root.get("userName");
-        query.where(builder.like(propertyPath, "%" + userName + "%"));
+
+        //Expression<String> propertyPath = root.get("userName");
+        query.where(builder.like(root.get("userName"), "%" + userName + "%"));
+
         List<User> users = session.createQuery(query).getResultList();
         session.close();
         return users;
