@@ -28,3 +28,4 @@
 ### Week 9
 - [ ] ALTER user table and User Entity, UserDao Test
 - [ ] Check for Checkpoint 2
+- [ ] Updated .gitignore file for sensitive data for database

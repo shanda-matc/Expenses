@@ -51,3 +51,4 @@ fabric.properties
 # Sensitive files
 /src/main/resources/hibernate.cfg.xml
 /src/test/resources/database.properties
+/logs
