@@ -3,7 +3,9 @@ package edu.shanda.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,12 +34,17 @@ public class LogIn extends HttpServlet {
         String LOGIN_URL = (String) getServletContext().getAttribute("LOGIN_URL");
         String REDIRECT_URL = (String) getServletContext().getAttribute("REDIRECT_URL");
 
+        System.out.println("LOGIN URL is: " + LOGIN_URL);
+        System.out.println("Client ID: " + CLIENT_ID);
+        System.out.println("URL is: " + REDIRECT_URL);
         // if properties weren't loaded properly, route to an error page
         if (LOGIN_URL == null || CLIENT_ID == null || REDIRECT_URL == null) {
             resp.sendRedirect("errorPage.jsp");
         } else {
             String url = LOGIN_URL + "?response_type=code&client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URL;
+            //https://scribble-amplify-kanck.auth.us-east-2.amazoncognito.com/login?client_id=2tsojp2s768rkn45j8m2514p7b&response_type=code&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2FScribbleAmplifyKnack_war%2Fauth%2Chttps%3A%2F%2Fscribbleamplifyknack-env.eba-bjetyabz.us-east-2.elasticbeanstalk.com%2Fauth
             resp.sendRedirect(url);
+            logger.info("Constructed URL: {}", url);
         }
     }
 }
