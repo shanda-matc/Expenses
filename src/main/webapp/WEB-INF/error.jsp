@@ -7,7 +7,7 @@
 --%>
 <jsp:include page="contentType.jsp" />
 <html>
-<jsp:include page="head.jsp" />
+<jsp:include page="../pageHeader.jsp" />
 <body role="document">
 <jsp:include page="navigation.jsp" />
 <div class="container theme-showcase" role="main">
