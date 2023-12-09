@@ -1,6 +1,5 @@
 package edu.shanda.controller;
 
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -8,11 +7,11 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.shanda.auth.*;
 import edu.shanda.entity.User;
+import edu.shanda.util.PropertiesLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.commons.io.*;
 import javax.servlet.http.HttpSession;
-
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -41,11 +40,11 @@ import java.util.stream.Collectors;
 @WebServlet(
         urlPatterns = {"/auth"}
 )
-// if something goes wrong it this process, route to an error page. Currently, errors are only caught and logged.
-/**
- * Inspired by: https://stackoverflow.com/questions/52144721/how-to-get-access-token-using-client-credentials-using-java-code
+
+/*
+  Inspired by: https://stackoverflow.com/questions/52144721/how-to-get-access-token-using-client-credentials-using-java-code
  */
-public class Auth extends HttpServlet {
+public class Auth extends HttpServlet implements PropertiesLoader {
     private final Logger logger = LogManager.getLogger(this.getClass());
     private String CLIENT_ID;
     private String CLIENT_SECRET;
@@ -57,6 +56,11 @@ public class Auth extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
+        try {
+            loadKey();
+        } catch (Exception e) {
+            logger.error("Error during servlet initialization: " + e.getMessage(), e);
+        }
         CLIENT_ID = (String) getServletContext().getAttribute("CLIENT_ID");
         CLIENT_SECRET = (String) getServletContext().getAttribute("CLIENT_SECRET");
         REDIRECT_URL = (String) getServletContext().getAttribute("REDIRECT_URL");
@@ -64,6 +68,10 @@ public class Auth extends HttpServlet {
         REGION = (String) getServletContext().getAttribute("REGION");
         POOL_ID = (String) getServletContext().getAttribute("POOL_ID");
         loadKey();
+
+        System.out.println("in nit redirect" + REDIRECT_URL);
+        logger.debug("In first One: " + REDIRECT_URL);
+
     }
 
     /**
@@ -75,9 +83,12 @@ public class Auth extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        logger.debug("Entering doGet method");
         String authCode = req.getParameter("code");
+        logger.debug("Auth code: " + authCode);
         String userName = null;
 
+        System.out.println("auth code:" + authCode);
         // Get the session
         HttpSession session = req.getSession();
 
@@ -146,6 +157,7 @@ public class Auth extends HttpServlet {
      * @throws IOException
      */
     private String validate(TokenResponse tokenResponse, HttpSession session) throws IOException {
+        logger.debug("Entering validate method");
         ObjectMapper mapper = new ObjectMapper();
         CognitoTokenHeader tokenHeader = mapper.readValue(CognitoJWTParser.getHeader(tokenResponse.getIdToken()).toString(), CognitoTokenHeader.class);
 
@@ -218,6 +230,7 @@ public class Auth extends HttpServlet {
         parameters.put("code", authCode);
         parameters.put("redirect_uri", REDIRECT_URL);
 
+
         String form = parameters.keySet().stream()
                 .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
                 .collect(Collectors.joining("&"));
@@ -227,7 +240,10 @@ public class Auth extends HttpServlet {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(OAUTH_URL))
                 .headers("Content-Type", "application/x-www-form-urlencoded", "Authorization", "Basic " + encoding)
                 .POST(HttpRequest.BodyPublishers.ofString(form)).build();
+        System.out.println("Redirct:" + REDIRECT_URL);
+        logger.info("Number-2:" + REDIRECT_URL);
         return request;
+
     }
 
     /**
