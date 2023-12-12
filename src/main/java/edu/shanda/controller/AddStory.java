@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -33,79 +32,70 @@ public class AddStory extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Retrieve the username from the session
+            // Check if the user is authenticated
             HttpSession session = request.getSession();
+            if (!authenticateUser(session)) {
+                showLoginPopupAndRedirect(response);
+                return;
+            }
+
+            // Retrieve story details from the request
+            String title = request.getParameter("title");
+            String content = request.getParameter("content");
+            String categoryValue = request.getParameter("category");
+
+            // Retrieve the author from the session
             String authorName = (String) session.getAttribute("userName");
             String authorEmail = (String) session.getAttribute("userEmail");
 
-            logger.debug("Author Name: " + authorName);
-            logger.debug("Author Email: " + authorEmail);
-
-            if (authorName == null || authorName.isEmpty() || authorEmail == null || authorEmail.isEmpty()) {
-                logger.error("Username or Email is null or empty");
+            // Validate input parameters
+            if (title == null || content == null || categoryValue == null || authorName == null || authorEmail == null) {
+                logger.error("Validation Error: One or more parameters are null");
                 response.sendRedirect("error.jsp");
                 return;
             }
 
-            // Use the retrieved information directly
-            User author = new User();
-            author.setUsername(authorName);
-            author.setEmail(authorEmail);
+            // Retrieve the existing user or save the new user to the database
+            User author = getOrCreateUser(authorName, authorEmail);
 
-           logger.debug("Author Name: " + authorName);
-
-            // Try to find an existing user with the given username and email
-            User existingUser = getUserByName(authorName, authorEmail);
-
-            if (existingUser != null) {
-                // Use the existing user found in the database
-                author = existingUser;
-            } else {
-                // Save the new user to the database
-                userDao.saveOrUpdate(author);
-            }
-            logger.debug("Author Name: " + authorName);
-
-            String title = request.getParameter("title");
-            String content = request.getParameter("content");
-            String categoryValue = request.getParameter("category");
             Category category = getCategoryByName(categoryValue);
-
-            // Check if Category object is found
+            // Check if Category is found
             if (category == null) {
                 logger.error("Error: Category is null");
                 response.sendRedirect("error.jsp");
                 return;
             }
 
-            // Validate input parameters
-            if (title == null || content == null || categoryValue == null) {
-                logger.error("Validation Error: One or more parameters are null");
-                response.sendRedirect("error.jsp");
-                return;
-            }
-
-            LocalDateTime creationDate = LocalDateTime.now();
+            LocalDateTime publicationDate = LocalDateTime.now();
 
             // Create a new Story instance
-            Story newStory = new Story();
-            newStory.setTitle(title);
-            newStory.setContent(content);
-            newStory.setPublicationDate(creationDate);
-            newStory.setCategory(category);  // Set the Category
-            newStory.setAuthor(author);
-
-            //Story newStory = new Story(title, content, category, author, creationDate);
-            System.out.println("New Story: " + newStory);
-
+            Story newStory = new Story(title, content, category, author, publicationDate);
             storyDao.saveOrUpdate(newStory);
 
-            response.sendRedirect("success.jsp"); // Redirect to a success page
+            request.setAttribute("storyAddedSuccessfully", true);
+            request.getRequestDispatcher("addStory.jsp").forward(request, response);
         } catch (Exception e) {
             logger.error("Error processing the request: " + e.getMessage(), e);
             response.sendRedirect("error.jsp");
         }
     }
+
+    private User getOrCreateUser(String name, String email) {
+        User existingUser = getUserByName(name, email);
+
+        if (existingUser != null) {
+            // Use the existing user found in the database
+            return existingUser;
+        } else {
+            // Save the new user to the database
+            User newUser = new User();
+            newUser.setUsername(name);
+            newUser.setEmail(email);
+            userDao.saveOrUpdate(newUser);
+            return newUser;
+        }
+    }
+
     private Category getCategoryByName(String name) {
         Map<String, Object> params = new HashMap<>();
         params.put("categoryName", name);
@@ -129,5 +119,17 @@ public class AddStory extends HttpServlet {
         } else {
             return null;
         }
+    }
+
+    private boolean authenticateUser(HttpSession session) {
+        // Check if the user is authenticated
+        return session.getAttribute("userName") != null && session.getAttribute("userEmail") != null;
+    }
+
+    private void showLoginPopupAndRedirect(HttpServletResponse response) throws IOException {
+        // Use JavaScript to show a popup and redirect
+        String script = "alert('You need to log in to write a story.');";
+        script += "window.location.href='logIn';";
+        response.getWriter().write("<script>" + script + "</script>");
     }
 }
