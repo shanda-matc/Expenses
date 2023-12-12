@@ -3,6 +3,7 @@ package edu.shanda.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "categories")
@@ -43,5 +44,8 @@ public class Category {
         this.categoryName = name;
     }
 }
+
+
+
 
 
