@@ -7,7 +7,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <jsp:include page="contentType.jsp" />
-<jsp:include page="navigation.jsp" />
 <html>
 <head>
     <title>Display Stories</title>
@@ -55,8 +54,6 @@
                             <p>${storyComment.user.username} said: ${storyComment.content} on ${storyComment.creationDate}</p>
                         </c:forEach>
 
-
-
                     </div>
                 </c:forEach>
                 <hr>
@@ -80,10 +77,9 @@
                         <textarea class="comment-textarea" name="comment" rows="4" cols="50" placeholder="Enter your comment here"></textarea><br>
                         <input class="comment-button" type="hidden" name="storyId" value="${story.storyId}">
                         <input class="comment-button" type="submit" value="Add Comment">
-
                         <c:if test="${story.author.username eq sessionScope.userName}">
-                            <a class="comment-button" href="updateStory?storyId=${story.storyId}">Update Story</a>
-                            <a class="comment-button" href="deleteStory?storyId=${story.storyId}">Delete Story</a>
+                            <a href="updateStory?storyId=${story.storyId}">Update Story</a>
+                            <a href="deleteStory?storyId=${story.storyId}">Delete Story</a>
                         </c:if>
                     </form>
 
@@ -92,6 +88,8 @@
                     <c:forEach var="storyComment" items="${story.comments}">
                         <p>${storyComment.user.username} said: ${storyComment.content} on ${storyComment.creationDate}</p>
                     </c:forEach>
+
+
                 </div>
             </c:forEach>
             <hr>
