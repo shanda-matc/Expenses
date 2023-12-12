@@ -1,36 +1,27 @@
--- Inserting test data for the 'categories' table
-INSERT INTO categories (category_id, category_name) VALUES
-                                                        (1, 'Anecdote'),
-                                                        (2, 'Drabble'),
-                                                        (3, 'Fable'),
-                                                        (4, 'Feghoot'),
-                                                        (5, 'Flash Fiction'),
-                                                        (6, 'Frame Story'),
-                                                        (7, 'Mini-saga'),
-                                                        (8, 'Story Sequence'),
-                                                        (9, 'Sketch Story'),
-                                                        (10, 'Vignette');
+-- Insert data into categories table
+INSERT INTO categories (category_name) VALUES
+                                           ('Fable'),
+                                           ('Ancedote'),
+                                           ('Mini-Saga'),
+                                           ('Sketch Story'),
+                                           ('Feghoot');
 
--- Inserting test data for the 'user' table
-INSERT INTO user (user_id, username, email, display_name, bio) VALUES
-                                                                   (1, 'user1', 'user1@example.com', 'User One', 'Bio for User One'),
-                                                                   (2, 'user2', 'user2@example.com', 'User Two', 'Bio for User Two'),
-                                                                   (3, 'user3', 'user3@example.com', 'User Three', 'Bio for User Three');
+-- Insert data into user table
+INSERT INTO user (username, email) VALUES
+                                       ('user1', 'user1@example.com'),
+                                       ('user2', 'user2@example.com'),
+                                       ('user3', 'user3@example.com');
 
--- Inserting test data for the 'stories' table
-INSERT INTO stories (story_id, title, category_id, content, publicationDate, categories_category_id, author_id, user_user_id) VALUES
-                                                                                                                                  (1, 'Story One', 1, 'Content for Story One', '2023-11-14 12:00:00', 1, 1, 1),
-                                                                                                                                  (2, 'Story Two', 2, 'Content for Story Two', '2023-11-14 12:30:00', 2, 2, 2),
-                                                                                                                                  (3, 'Story Three', 3, 'Content for Story Three', '2023-11-14 13:00:00', 3, 3, 3);
+-- Insert data into stories table
+INSERT INTO stories (title, category_id, content, publicationDate, author_id) VALUES
+                                                                                  ('The Quantum Paradox', 37, 'In the year 2150, humanity unlocked the secrets of quantum physics, leading to unexpected consequences and a thrilling adventure through parallel dimensions.', NOW(), 21),
+                                                                                  ('The Enigma Files', 38, 'Detective Sarah Mitchell unravels a series of mysterious cases, each more puzzling than the last, leading her to a secret society with dark intentions.', NOW(), 20),
+                                                                                  ('Realm of Eldoria', 39, 'A young mage embarks on a quest to save the magical realm of Eldoria from an ancient evil, encountering mythical creatures and testing the limits of bravery.', NOW(), 22);
 
--- Inserting test data for the 'comments' table
-INSERT INTO comments (comment_id, story_id, user_id, content, creation_date, user_user_id) VALUES
-                                                                                               (1, 1, 1, 'Comment for Story One', '2023-11-14 12:15:00', 1),
-                                                                                               (2, 2, 2, 'Comment for Story Two', '2023-11-14 12:45:00', 2),
-                                                                                               (3, 3, 3, 'Comment for Story Three', '2023-11-14 13:15:00', 3);
+-- Insert data into comments table
+INSERT INTO comments (story_id, user_id, content, creation_date) VALUES
+                                                                     (1, 21, 'Great story!', NOW()),
+                                                                     (2, 20, 'This detective story ', NOW()),
+                                                                     (3, 22, 'The magical word!', NOW());
 
--- Inserting test data for the 'ratings' table
-INSERT INTO ratings (rating_id, story_id, user_id, stories_story_id) VALUES
-                                                                         (1, 1, 1, 1),
-                                                                         (2, 2, 2, 2),
-                                                                         (3, 3, 3, 3);
+
