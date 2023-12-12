@@ -34,6 +34,7 @@ public class Comment {
     public Comment() {
     }
 
+
     /**
      * Instantiates a new Comment.
      *
@@ -61,6 +62,7 @@ public class Comment {
     public int getCommentId() {
         return commentId;
     }
+
 
     /**
      * Sets comment id.
@@ -142,4 +144,16 @@ public class Comment {
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "commentId=" + commentId +
+                ", user=" + user +
+                ", content='" + content + '\'' +
+                ", creationDate=" + creationDate +
+                ", story=" + story.getTitle() +
+                '}';
+    }
+
 }
