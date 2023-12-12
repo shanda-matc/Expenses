@@ -1,6 +1,9 @@
 package edu.shanda.entity;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * The type Story.
@@ -16,7 +19,7 @@ public class Story {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @ManyToOne
@@ -25,11 +28,21 @@ public class Story {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
     @Column(name = "publicationDate")
     private LocalDateTime publicationDate;
+    @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     /**
      * Instantiates a new Story.
@@ -163,4 +176,23 @@ public class Story {
     public void setPublicationDate(LocalDateTime publicationDate) {
         this.publicationDate = publicationDate;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Story other = (Story) obj;
+        // Compare fields for equality
+        return Objects.equals(this.storyId, other.storyId) &&
+                Objects.equals(this.title, other.title) &&
+                Objects.equals(this.author, other.author) &&
+                Objects.equals(this.content, other.content) &&
+                Objects.equals(this.publicationDate, other.publicationDate);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(storyId, title, author, content, publicationDate);
+    }
+
+
 }
