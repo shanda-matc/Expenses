@@ -46,3 +46,4 @@ CREATE TABLE user (
                       email VARCHAR(50) NOT NULL,
                       PRIMARY KEY (user_id)
 );
+
