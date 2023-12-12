@@ -41,7 +41,7 @@
             <div class="col-lg-4 col-md-6 text-center">
                 <div class="mt-5">
                     <div class="mb-2"><i class="bi-puzzle fs-1 text-primary"></i></div>
-                    <h3 class="h4 mb-2"><a href="displayStories.jsp?category=Feghoot">Feghoot</a></h3>
+                    <h3 class="h4 mb-2"><a href="displayStories?category=Feghoot">Feghoot</a></h3>
                     <p class="text-muted mb-0">A feghoot is an interesting short story type also known as a story pun or a poetic story joke. It is a humorous piece ending in an atrocious pun.
                         It can be very short, only long enough to sufficiently illustrate the context of the piece enough to lead up to the pun.</p>
                 </div>
