@@ -5,6 +5,7 @@ import edu.shanda.entity.Story;
 import edu.shanda.entity.User;
 import edu.shanda.persistence.GenericDao;
 import edu.shanda.util.DaoFactory;
+import edu.shanda.util.EmailSender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,108 +19,111 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@WebServlet(
-        urlPatterns = {"/comment"}
-)
+@WebServlet(urlPatterns = {"/comment"})
 public class CommentServlet extends HttpServlet {
     private final Logger logger = LogManager.getLogger(this.getClass());
     private final GenericDao<Story> storyDao = DaoFactory.createDao(Story.class);
     private final GenericDao<Comment> commentDao = DaoFactory.createDao(Comment.class);
-
     private final GenericDao<User> userDao = DaoFactory.createDao(User.class);
+    private EmailSender emailSender;
+    // Constructor
+    public CommentServlet() {
+        emailSender = new EmailSender("shilpa25", "MyGoogleGmail@2429", "smtp.gmail.com", "shilpahanda49@gmail.com");
+    }
+
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Retrieve information about the story
             int storyId = Integer.parseInt(request.getParameter("storyId"));
-
-            // Fetch the existing story from the database
             Story existingStory = storyDao.getById(storyId);
-
-            // Set the existing story as an attribute
             request.setAttribute("existingStory", existingStory);
-
-            // Forward the request to the comment.jsp page
             request.getRequestDispatcher("comment.jsp").forward(request, response);
-        } catch (Exception e) {
-            logger.error("Error processing the request: " + e.getMessage(), e);
+        } catch (NumberFormatException e) {
+            logger.error("Error processing the request: {}", e.getMessage(), e);
             response.sendRedirect("errorPage.jsp");
         }
     }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Check if the user is authenticated
             HttpSession session = request.getSession();
             String userName = (String) session.getAttribute("userName");
+            logger.info("Retrieved username from session: {}", userName);
 
             if (userName != null) {
-                // Retrieve information about the comment
                 int storyId = Integer.parseInt(request.getParameter("storyId"));
                 String commentText = request.getParameter("comment");
 
-                // Fetch the existing story from the database
                 Story existingStory = storyDao.getById(storyId);
-
-                // Create a new comment
                 Comment newComment = new Comment();
                 newComment.setStory(existingStory);
                 newComment.setContent(commentText);
 
-                // Fetch the user object based on the username
                 List<User> users = userDao.findByPropertyEqual("username", userName);
+                logger.info("Found users with username {}: {}", userName, users);
 
                 if (!users.isEmpty()) {
                     User currentUser = users.get(0);
                     newComment.setUser(currentUser);
-
-                    // Set the creation date
                     newComment.setCreationDate(LocalDateTime.now());
-
-                    // Save the comment to the database using the GenericDao
                     commentDao.insert(newComment);
 
-                    // Send email to the writer
+                    // Show success popup and redirect to index page
+                    showPopupAndRedirect(response, request, "Comment added successfully!", "index.jsp");
                     sendEmailToWriter(existingStory, newComment);
-
-                    // Set success message in request attribute
-                    request.setAttribute("commentSuccessMessage", "Comment submitted successfully!");
-
-                    // Forward back to the comment.jsp page with the updated comments
-                    request.getRequestDispatcher("comment.jsp").forward(request, response);
                 } else {
-                    //  if user is not found, then redirect to error page
-                    logger.error("User with username {} not found.", userName);
+                    // If user is not found, create a new user and store in the database
+                    User newUser = new User();
+                    String newUserName = (String) session.getAttribute("userName");
+                    String userEmail = (String) session.getAttribute("userEmail");
+
+                    newUser.setUsername(newUserName);
+                    newUser.setEmail(userEmail);
+
+                    // Set other user properties as needed
+                    userDao.insert(newUser);
+
+                    // Set the newly created user to the comment
+                    newComment.setUser(newUser);
+                    newComment.setCreationDate(LocalDateTime.now());
+                    commentDao.insert(newComment);
+
+                    // Show success popup and redirect to index page
+                    showPopupAndRedirect(response, request, "Comment added successfully!", "index.jsp");
+
+                    sendEmailToWriter(existingStory, newComment);
                 }
             } else {
-                // User is not authenticated, forward to the login servlet
-                showLoginPopupAndRedirect(response);
+                showPopupAndRedirect(response, request, "Please login to comment..", "logIn");
             }
         } catch (Exception e) {
-            logger.error("Error processing the comment submission: " + e.getMessage(), e);
+            logger.error("Error processing the comment submission: {}", e.getMessage(), e);
             response.sendRedirect("errorPage.jsp");
         }
     }
 
     private void sendEmailToWriter(Story existingStory, Comment newComment) {
         try {
-            // Retrieve the writer of the story
             User writer = existingStory.getAuthor();
 
-            // Check if the writer has an email
             if (writer != null && writer.getEmail() != null && !writer.getEmail().isEmpty()) {
-                // Use EmailServlet method to send email
-                new EmailServlet().sendEmailToWriter(writer.getEmail(), newComment.getContent());
+                String subject = "New Comment on Your Story";
+                String body = "Hello,\n\nSomeone commented on your story:\n\n" + newComment.getContent();
+
+                // Use the instance of EmailSender to send the email
+                emailSender.sendEmail(writer.getEmail(), subject, body);
             } else {
                 logger.warn("Writer has no valid email address. Email not sent.");
             }
-
         } catch (Exception e) {
-            logger.error("Error sending email to writer: " + e.getMessage(), e);
+            logger.error("Error sending email to writer: {}", e.getMessage(), e);
         }
     }
-    private void showLoginPopupAndRedirect(HttpServletResponse response) throws IOException {
-        // Use JavaScript to show a popup and redirect
-        String script = "alert('You need to log in to write a comment on a story.');";
-        script += "window.location.href='logIn';";
+
+    private void showPopupAndRedirect(HttpServletResponse response, HttpServletRequest request, String message, String redirectPage) throws IOException {
+        String script = "alert('" + message + "');";
+        script += "window.location.href='" + response.encodeRedirectURL(request.getContextPath() + "/" + redirectPage) + "';";
         response.getWriter().write("<script>" + script + "</script>");
     }
+
 }
