@@ -3,9 +3,7 @@ package edu.shanda.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +19,10 @@ import java.io.IOException;
  */
 public class LogIn extends HttpServlet {
     private final Logger logger = LogManager.getLogger(this.getClass());
+    @Override
+    public void init() throws ServletException {
+        super.init();
+    }
     /**
      * Route to the aws-hosted cognito login page.
      * @param req servlet request
@@ -34,9 +36,6 @@ public class LogIn extends HttpServlet {
         String LOGIN_URL = (String) getServletContext().getAttribute("LOGIN_URL");
         String REDIRECT_URL = (String) getServletContext().getAttribute("REDIRECT_URL");
 
-        System.out.println("LOGIN URL is: " + LOGIN_URL);
-        System.out.println("Client ID: " + CLIENT_ID);
-        System.out.println("URL is: " + REDIRECT_URL);
         // if properties weren't loaded properly, route to an error page
         if (LOGIN_URL == null || CLIENT_ID == null || REDIRECT_URL == null) {
             resp.sendRedirect("errorPage.jsp");
