@@ -40,6 +40,9 @@ public class DisplayStories extends HttpServlet {
             // Log the contents of categoryStoriesMap
             logCategoryStoriesMap(categoryStoriesMap);
 
+            logger.debug("Categories: " + categories);
+            logger.debug("Category Stories Map: " + categoryStoriesMap);
+
             request.getRequestDispatcher("displayStories.jsp").forward(request, response);
         } catch (Exception e) {
             handleException(response, e);
