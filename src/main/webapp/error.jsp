@@ -5,38 +5,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
     <title>Error Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .error-container {
-            max-width: 600px;
-            margin: 50px auto;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: #d9534f;
-        }
-
-        p {
-            color: #333;
-        }
-
-        .error-code {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #d9534f;
-        }
-    </style>
+        <link href="css/custom.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
 <% if(response.getStatus() == 500){ %>
