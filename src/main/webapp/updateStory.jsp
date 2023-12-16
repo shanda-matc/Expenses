@@ -8,7 +8,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="contentType.jsp" />
-<jsp:include page="navigation.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,22 +19,28 @@
 <body>
 
 <h2>Update Story</h2>
-
-<form action="updateStory" method="post">
+<div class="col-lg-8 align-self-baseline">
+    <form action="updateStory" method="post">
     <input type="hidden" name="storyId" value="${existingStory.storyId}">
 
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" value="${existingStory.title}" required>
-    <br>
+        <div class="col-md-12">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" value="${existingStory.title}" required>
+            <br>
+        </div>
 
-    <label for="content">Content:</label>
-    <textarea id="content" name="content" rows="4"  required>${existingStory.content}</textarea>
-    <br>
+        <div class="col-md-12">
+            <label for="content" class="form-label text-white">Content:</label>
+            <textarea id="content" class="form-control" name="content" rows="5"  required>${existingStory.content}</textarea>
+            <br>
+        </div>
 
-    <input type="submit" value="Update Story">
-    <a href="index.jsp">Go back to Home</a>
-</form>
-
+        <div class="col-md-12">
+            <input type="submit" class="btn btn-primary" value="Update Story">
+        </div>
+            <a href="index.jsp">Go back to Home</a>
+    </form>
+</div>
 </body>
 </html>
 
