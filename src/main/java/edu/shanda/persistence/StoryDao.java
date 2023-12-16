@@ -17,7 +17,7 @@ public class StoryDao {
     private final GenericDao<Story> storyDao = DaoFactory.createDao(Story.class);
     private final Logger logger = LogManager.getLogger(this.getClass());
     private static final String chatGptApiUrl = "https://api.openai.com/v1/chat/completions";
-    private static final String apiKey = "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";
+    private static final String apiKey = "";
 
     public String generateShortStory(String prompt) {
         Client client = ClientBuilder.newClient();
