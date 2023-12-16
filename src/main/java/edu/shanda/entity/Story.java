@@ -27,7 +27,7 @@ public class Story {
     private Category category;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
@@ -178,21 +178,16 @@ public class Story {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Story other = (Story) obj;
-        // Compare fields for equality
-        return Objects.equals(this.storyId, other.storyId) &&
-                Objects.equals(this.title, other.title) &&
-                Objects.equals(this.author, other.author) &&
-                Objects.equals(this.content, other.content) &&
-                Objects.equals(this.publicationDate, other.publicationDate);
-    }
-    @Override
-    public int hashCode() {
-        return Objects.hash(storyId, title, author, content, publicationDate);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Story story = (Story) o;
+        return Objects.equals(getStoryId(), story.getStoryId());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getStoryId());
+    }
 
 }

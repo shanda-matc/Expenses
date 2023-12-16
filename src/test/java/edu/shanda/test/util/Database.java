@@ -1,6 +1,5 @@
-package test.util;
+package edu.shanda.test.util;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +31,7 @@ public class Database {
     private Connection connection;
 
     // private constructor prevents instantiating this class anywhere else
-    private Database() {
+    public Database() {
         loadProperties();
     }
 

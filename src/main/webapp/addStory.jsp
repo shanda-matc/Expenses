@@ -1,4 +1,7 @@
 <jsp:include page="contentType.jsp" />
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%--
   Created by IntelliJ IDEA.
   User: shanda
@@ -44,14 +47,23 @@
                         </select>
                         <div class="invalid-feedback">Please select a category.</div>
                     </div>
-                    <div class="col-12">
-                        <label for="content" class="form-label text-white">Content:</label>
-                        <textarea id="content" class="form-control" name="content" rows="5" required></textarea>
-                        <div class="invalid-feedback">Please enter the content.</div>
+                    <div>
+                        <%--@declare id="contentsource"--%>
+                        <label for="contentSource" class="form-label text-white">Content Source:</label>
+                        <input class="form-label text-white" type="radio" name="contentSource" value="api" checked> Fetch from API
+                        <input class="form-label text-white" type="radio" name="contentSource" value="user"> Write my own
                     </div>
+
+                    <div>
+                        <%--@declare id="usercontent"--%>
+                        <label class="form-label text-white" for="userContent">Content:</label>
+                        <textarea name="userContent" rows="4" cols="50"></textarea>
+                    </div>
+
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
+
                 </form>
             </div>
         </div>

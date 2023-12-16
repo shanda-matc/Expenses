@@ -14,6 +14,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type Story test.
+ */
 class StoryTest {
     private final Logger logger = LogManager.getLogger(this.getClass());
     private GenericDao<Story> storyDao;
@@ -23,6 +26,9 @@ class StoryTest {
     private Category category;
     private final Database database = new Database();
 
+    /**
+     * Sets up.
+     */
     @BeforeEach
     public void setUp() {
         database.runSQL("cleandb.sql");
@@ -36,12 +42,17 @@ class StoryTest {
         category = categoryDao.getAll().get(0);
     }
 
+    /**
+     * Test create.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testCreate() throws Exception {
-        Category category = categoryDao.getById(37);
+        Category category = categoryDao.getById(1);
         assertNotNull(category);
 
-        User user = userDao.getById(20);
+        User user = userDao.getById(2);
         assertNotNull(user);
 
         Story createdStory = new Story("Test Title", "Test Content", category, user, LocalDateTime.now());
@@ -58,19 +69,27 @@ class StoryTest {
     }
 
 
+    /**
+     * Test get.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGet() throws Exception {
         assertNotNull(story);
-        //logger.info("actual story:" + story);
 
         int storyId = story.getStoryId();
         Story retrievedStory = storyDao.getById(storyId);
-        //logger.info("Retrieved story:" + retrievedStory);
 
         assertNotNull(retrievedStory);
         assertEquals(story, retrievedStory);
     }
 
+    /**
+     * Test get all.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testGetAll() throws Exception {
         assertNotNull(storyDao, "storyDao should not be null");
@@ -78,6 +97,11 @@ class StoryTest {
         assertTrue(stories.size() > 0);
     }
 
+    /**
+     * Test update.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testUpdate() throws Exception {
         assertNotNull(story);
@@ -89,6 +113,11 @@ class StoryTest {
         assertEquals(story, updatedStory);
     }
 
+    /**
+     * Test delete.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testDelete() throws Exception {
         assertNotNull(story);

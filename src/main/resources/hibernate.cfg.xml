@@ -14,9 +14,14 @@
         <property name="hibernate.c3p0.timeout">300</property>
         <property name="hibernate.c3p0.max_statements">50</property>
         <property name="hibernate.c3p0.idle_test_period">3000</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
 
-        <mapping class="entity.User"/>
-
+        <mapping class="edu.shanda.entity.User"/>
+        <mapping class="edu.shanda.entity.Story"/>
+        <mapping class="edu.shanda.entity.Category"/>
+        <mapping class="edu.shanda.entity.Comment"/>
+        <mapping class="edu.shanda.entity.Rating"/>
     </session-factory>
-
 </hibernate-configuration>

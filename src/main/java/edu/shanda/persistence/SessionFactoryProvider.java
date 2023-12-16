@@ -1,4 +1,4 @@
-package persistence;
+package edu.shanda.persistence;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;

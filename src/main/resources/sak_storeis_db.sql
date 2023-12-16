@@ -10,7 +10,7 @@ CREATE TABLE comments (
                           comment_id INT NOT NULL AUTO_INCREMENT,
                           story_id INT NOT NULL,
                           user_id INT NOT NULL,
-                          content VARCHAR(50) NOT NULL,
+                          content text NOT NULL,
                           creation_date TIMESTAMP NOT NULL,
                           PRIMARY KEY (comment_id),
                           CONSTRAINT fk_comments_user FOREIGN KEY (user_id) REFERENCES user (user_id)
@@ -31,7 +31,7 @@ CREATE TABLE stories (
                          story_id INT NOT NULL AUTO_INCREMENT,
                          title VARCHAR(50) NOT NULL,
                          category_id INT NOT NULL,
-                         content VARCHAR(50) NOT NULL,
+                         content text NOT NULL,
                          publicationDate TIMESTAMP NOT NULL,
                          author_id INT NOT NULL,
                          PRIMARY KEY (story_id),
